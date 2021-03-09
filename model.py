@@ -53,7 +53,7 @@ def compute_SD(model, x):
 
 
 def normal(agent_ability, x):
-    # agent_ability = [agent.ability for agent in model.schedule.agents]
+    
     minValue = min(agent_ability)
     maxValue = max(agent_ability)
     rescale = (x - minValue) / maxValue - minValue
