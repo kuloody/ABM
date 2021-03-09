@@ -484,7 +484,7 @@ class SimClass(Model):
         self.yellowState = 0
         self.greenState = 0
 
-        data = pd.read_csv('/home/zsrj52/Downloads/SimClass/DataSample.csv')
+        data = pd.read_csv('Input/DataSample.csv')
         maths = data['s_maths'].to_numpy()
         ability_zscore = stats.zscore(maths)
         behave = data['behav1'].to_numpy()
