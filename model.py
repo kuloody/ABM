@@ -439,7 +439,7 @@ class SimClassAgent(Agent):
         self.countLearning += 1
 
         # Scale Smath before using it to calculate end math score
-        # 69 = 12000 with outliers 7.346160282 and 8550 7.621204857
+        # 8550t = 7.621204857
 
         Scaled_Smath = (2.718281828 ** self.s_math) ** (1 / 7.621204857)
         total_learn = self.countLearning + Scaled_Smath
@@ -483,6 +483,8 @@ class SimClass(Model):
         self.redState = 0
         self.yellowState = 0
         self.greenState = 0
+        
+        #Load data
 
         data = pd.read_csv('Input/DataSample.csv')
         maths = data['s_maths'].to_numpy()
@@ -491,7 +493,7 @@ class SimClass(Model):
         behav2 = data['behav2'].to_numpy()
 
         # Set up agents
-        # create all agent with random state and generate a random score for inattentiveness
+       
         counter = 0
         for cell in self.grid.coord_iter():
             x = cell[1]
@@ -501,10 +503,9 @@ class SimClass(Model):
             agent_type = self.random.randint(1, 3)
             ability = ability_zscore[counter]
 
-            # Create Agents from simulation
-            # agent = SimClassAgent((x, y), self, agent_type, agent_inattentiveness, agent_hyper_Impulsive,
-            #                      smath, ability)
-            # create agents form real data
+ 
+
+            # create agents form data
             agent = SimClassAgent((x, y), self, agent_type, behave[counter], behav2[counter],
                                   maths[counter], ability)
             # Place Agents on grid
@@ -513,15 +514,14 @@ class SimClass(Model):
             self.schedule.add(agent)
             counter += 1
 
-        # Collect chosen data while running the model
+        # Collecting data while running the model
         self.datacollector = DataCollector(
             model_reporters={"Distruptive Students": "distruptive",
                              "Learning Students": "learning",
                              "Average End Math": compute_ave,
                              "disruptiveTend": compute_ave_disruptive
                              },
-            # Model-level count of learning agents
-            # For testing purposes, agent's individual x and y
+            # Model-level count of learning agent
             agent_reporters={"x": lambda a: a.pos[0], "y": lambda a: a.pos[1], "Inattentiveness_score": "behave",
                              "Hyber_Inattinteveness": "behave_2", "S_math": "s_math", "S_read": "s_read",
                              "E_math": "e_math", "E_read": "e_read", "ability": "ability",
@@ -532,7 +532,7 @@ class SimClass(Model):
     def step(self):
 
 
-        self.learning = 0  # Reset counter of learing agents
+        self.learning = 0  # Reset counter of learing and disruptive agents
         self.distruptive = 0
         self.datacollector.collect(self)
         self.schedule.step()
@@ -542,5 +542,4 @@ class SimClass(Model):
         if self.schedule.steps == 8550.0 or self.running == False:
             self.running = False
             dataAgent = self.datacollector.get_agent_vars_dataframe()
-            dataAgent.to_csv(
-                '/home/zsrj52/Downloads/SimClass/Simulations-108/Simulation2.csv')
+            dataAgent.to_csv('Simulation.csv')
