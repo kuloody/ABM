@@ -4,7 +4,7 @@ Classroom simulation with Agent Based Modelling
 Use the following link to download Python version 3.7.5
 https://www.python.org/downloads/release/python-375/
 
-Choose the compatible version to your operating system
+Choose the compatible file to your operating system and run the executable installer.
 
 Check that Python is installed using:
 
